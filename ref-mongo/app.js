@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema({
 
 })
 
+//testing
+
 //post schema with ref
 const postSchema = new mongoose.Schema({
    title: String,

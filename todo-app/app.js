@@ -1,76 +1,32 @@
 const express = require('express');
-const bodyParser = require('body-parser')
-const app = express()
-const port = 3000;
+const app = express();
 
-//middleware to parse
-app.use(bodyParser.json())
+//server instantiate or activated
 
-//our list
-let todos = [];
+//load config from env #bestPractice
+require("dotenv").config();
+const PORT = process.env.PORT || 4000;
 
-//get to fetch all the todos
-app.get('/todos', (req,res) => {
-    res.json({
-        success:true,
-        data:todos
-    })
+//middleware to parse json request body
+app.use(express.json());
+
+//import routes for TODO API
+
+const todoRoutes = require("./routes/routes")
+
+//mount the todo API routes //add //append
+app.use("/api/v1", todoRoutes);
+
+//START SERVER
+app.listen(PORT, () => {
+    console.log(`server started at ${PORT}`);
 })
 
-//Getting todo by Id
-app.get("/todos/:id", (req,res) => {
-    const todoId = parseInt(req.params.id);
-    const todo = todos.find(t => t.id === todoId);
+//CONNECT TO THE DATABASE
+    const dbConnect = require ("./config/dataBase");
+    dbConnect();
 
-    if(!todo){
-        return res.status(404).json({
-            success: false,
-            message: 'Todo Not Found'
-        })
-     }
-    
-     res.json({
-        success:true,
-        data:todo
-     })
-
+//default route
+app.get("/", (req,res) => {
+    res.send(`<h1>This is homepage </h1>`)
 })
-
-
-// post to create a new todo
-app.post('/todos', (req,res) => {
-    const {title,description} = req.body;
-
-    //validate request body
-    if(!title) {
-        return res.status(400).json({
-            success: false,
-            message: "Title is required"
-        })
-    }
-
-    // new Todo
-
-const newTodo = {
-    id: todos.length + 1,
-    title,
-    description: description || '',
-    completed: false,
-    createdAt: new Date()
-}
-
-todos.push(newTodo);
-
-res.status(201).json({
-    success:true,
-    data: newTodo
-})
-
-})
-
-//start the server
-app.listen(port, () => {
-    console.log(`Todo API server running at http://localhost:${port}`);
-});
-
-
