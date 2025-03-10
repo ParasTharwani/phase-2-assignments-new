@@ -1,7 +1,7 @@
 {
-  "name": "crud-mysql",
+  "name": "27-01-25",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "script.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +12,6 @@
   "description": "",
   "dependencies": {
     "express": "^4.21.2",
-    "mysql": "^2.18.1"
+    "socket.io": "^4.8.1"
   }
 }
